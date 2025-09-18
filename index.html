@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drama OST Player</title>
+  <style>
+    @font-face {
+      font-family: 'IsYun';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+      font-weight: normal;
+      font-display: swap;
+    }
+
+    body {
+      background: #FFE8EE;
+      padding: 80px;
+      text-align: center;
+      color: #f95f90;
+      font-family: 'IsYun', sans-serif;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      font-size: 30px;
+    }
+
+    p {
+      line-height: 1.5em;
+      padding-top: 10px;
+    }
+
+    .bar {
+      display: inline-block; 
+      width: 1px;         
+      height: 0.6em;           
+      background-color: #f95f90;
+      opacity: 35%;
+      margin: 0 8px 3px 8px;         
+      vertical-align: middle; 
+    }
+
+    .thumb-container {
+      display: grid;
+      grid-template-columns: repeat(2, 148px);
+      grid-auto-rows: 104px;                
+      gap: 18px;
+      justify-content: center;
+    }
+
+    .thumb {
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* 기본 핑크 오버레이 */
+    .thumb::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,100,149,0.15);
+      pointer-events: none;
+      border-radius: 10px;
+      transition: opacity 0.3s;
+    }
+
+
+    /* 클릭 시 오버레이 제거*/
+    .thumb.active::after {
+      opacity: 0;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: filter 0.3s;
+    }
+
+    .thumb.active img {
+      transform: scale(1.05) rotate(-2deg);
+      border: 2px solid #FF6495;
+      box-shadow: 0 0 10px rgba(255,100,149,0.6);
+    }
+
+    .emoji {
+    display: inline-block;
+    animation: rotateEmoji 2s infinite linear;
+    }
+
+    .emoji:nth-child(2) { animation-delay: 0.3s; } 
+
+    .emoji:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes rotateEmoji {
+      0%   { transform: rotate(0deg); }
+      25%  { transform: rotate(15deg); }
+      50%  { transform: rotate(0deg); }
+      75%  { transform: rotate(-15deg); }
+      100% { transform: rotate(0deg); }
+  </style>
+</head>
+<body>
+  <!-- 음악들 -->
+  <audio id="audio1" src="src/music1.mp3"></audio>
+  <audio id="audio2" src="src/music2.mp3"></audio>
+  <audio id="audio3" src="src/music3.mp3"></audio>
+  <audio id="audio4" src="src/music4.mp3"></audio>
+  <audio id="audio5" src="src/music5.mp3"></audio>
+  <audio id="audio6" src="src/music6.mp3"></audio>
+
+  <h1 class="shine"><span class="emoji">🎶</span> 드라마 오슷두 모음 <span class="emoji">🎧</span></h1>
+
+  <!-- 썸네일 6개 -->
+  <div class="thumb-container">
+    <div class="thumb" data-audio="audio1"><img src="src/thumb1.png" alt="Thumb 1"></div>
+    <div class="thumb" data-audio="audio2"><img src="src/thumb2.png" alt="Thumb 2"></div>
+    <div class="thumb" data-audio="audio3"><img src="src/thumb3.png" alt="Thumb 3"></div>
+    <div class="thumb" data-audio="audio4"><img src="src/thumb4.png" alt="Thumb 4"></div>
+    <div class="thumb" data-audio="audio5"><img src="src/thumb5.png" alt="Thumb 5"></div>
+    <div class="thumb" data-audio="audio6"><img src="src/thumb6.png" alt="Thumb 6"></div>
+  </div>
+
+  <p>
+    <쾌걸춘향> 응급실<span class="bar"></span><시그널> 길<br>
+    <궁> Perhaps Love<span class="bar"></span><꽃보다 남자> 알고있나요<br>
+    <미안하다 사랑한다> 눈의꽃<span class="bar"></span><달의연인 보보경심 려> 너를 위해
+  </p>
+
+
+  <script>
+    const thumbs = document.querySelectorAll(".thumb");
+    let currentAudio = null;
+    let currentThumb = null;
+
+    thumbs.forEach(thumb => {
+      const audioId = thumb.dataset.audio;
+      const audioEl = document.getElementById(audioId);
+
+      thumb.addEventListener("click", () => {
+        if (currentThumb === thumb) {
+          if (!audioEl.paused) {
+            audioEl.pause();
+            thumb.classList.remove("active");
+          } else {
+            audioEl.play();
+            thumb.classList.add("active");
+          }
+        } else {
+          if (currentAudio) {
+            currentAudio.pause();
+            currentThumb.classList.remove("active");
+          }
+          audioEl.play();
+          thumb.classList.add("active");
+
+          currentAudio = audioEl;
+          currentThumb = thumb;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
